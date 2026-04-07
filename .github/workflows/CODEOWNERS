@@ -1,0 +1,8 @@
+# Default owner for everything
+* @RonakSurana-2001
+
+# Require QA team for QA-related files (optional)
+configs/qa.json @RonakSurana-2001
+
+# Require PROD approver for critical files
+configs/prod.json @RonakSurana-2001
