@@ -27,7 +27,7 @@ jobs:
 
   prod:
     needs: qa   
-    if: github.ref == 'refs/heads/QA_BRANCH'
+    if: needs.qa.result == 'success'
     runs-on: ubuntu-latest
     environment: prod   # 🔐 approval
 
