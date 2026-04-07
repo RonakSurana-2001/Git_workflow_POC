@@ -26,6 +26,7 @@ jobs:
           git push origin QA_BRANCH
 
   prod:
+    needs: qa   
     if: github.ref == 'refs/heads/QA_BRANCH'
     runs-on: ubuntu-latest
     environment: prod   # 🔐 approval
