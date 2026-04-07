@@ -7,47 +7,64 @@ on:
   push:
     branches:
       - DEV_BRANCH
-      - QA_BRANCH
 
 jobs:
-  qa:
-    if: github.ref == 'refs/heads/DEV_BRANCH'
+
+  # 🔔 Step 1: Notify QA
+  notify-qa:
     runs-on: ubuntu-latest
-    environment: qa   # 🔐 approval
+    steps:
+      - name: Send QA Email
+        run: echo "📧 QA Approval Required"
+
+
+  # 🔐 Step 2: QA Approval + Merge
+  qa:
+    needs: notify-qa
+    runs-on: ubuntu-latest
+    environment: qa
 
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - name: Awaiting QA Approval
-        run: echo "Waiting for QA approval..."
-
       - run: |
           git config user.name "RonakSurana-2001"
           git config user.email "ronaksurana2017@github.com"
+
           git fetch origin
           git checkout QA_BRANCH
           git merge origin/DEV_BRANCH
           git push origin QA_BRANCH
 
-  prod:
-    needs: qa   
+
+  # 🔔 Step 3: Notify PROD (ONLY AFTER QA SUCCESS)
+  notify-prod:
+    needs: qa
     if: needs.qa.result == 'success'
     runs-on: ubuntu-latest
-    environment: prod   # 🔐 approval
+
+    steps:
+      - name: Send PROD Email
+        run: echo "📧 PROD Approval Required"
+
+
+  # 🔐 Step 4: PROD Approval + Merge
+  prod:
+    needs: notify-prod
+    runs-on: ubuntu-latest
+    environment: prod
 
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - name: Awaiting PROD Approval
-        run: echo "Waiting for PROD approval..."
-
       - run: |
           git config user.name "RonakSurana-2001"
           git config user.email "ronaksurana2017@github.com"
+
           git fetch origin
           git checkout PROD_BRANCH
           git merge origin/QA_BRANCH
