@@ -1,0 +1,34 @@
+name: Simple Promotion
+
+on:
+  push:
+    branches:
+      - DEV_BRANCH
+      - QA_BRANCH
+
+jobs:
+  qa:
+    if: github.ref == 'refs/heads/DEV_BRANCH'
+    runs-on: ubuntu-latest
+    environment: qa   # 🔐 approval
+
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          git fetch origin
+          git checkout QA_BRANCH
+          git merge origin/DEV_BRANCH
+          git push origin QA_BRANCH
+
+  prod:
+    if: github.ref == 'refs/heads/QA_BRANCH'
+    runs-on: ubuntu-latest
+    environment: prod   # 🔐 approval
+
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          git fetch origin
+          git checkout PROD_BRANCH
+          git merge origin/QA_BRANCH
+          git push origin PROD_BRANCH
