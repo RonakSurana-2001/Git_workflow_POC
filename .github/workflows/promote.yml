@@ -20,6 +20,8 @@ jobs:
         with:
           fetch-depth: 0
       - run: |
+          git config user.name "RonakSurana-2001"
+          git config user.email "ronaksurana2017@github.com"
           git fetch origin
           git checkout QA_BRANCH
           git merge origin/DEV_BRANCH
@@ -36,6 +38,8 @@ jobs:
         with:
           fetch-depth: 0
       - run: |
+          git config user.name "RonakSurana-2001"
+          git config user.email "ronaksurana2017@github.com"
           git fetch origin
           git checkout PROD_BRANCH
           git merge origin/QA_BRANCH
