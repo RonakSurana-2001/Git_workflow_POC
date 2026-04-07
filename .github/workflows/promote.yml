@@ -1,5 +1,8 @@
 name: Simple Promotion
 
+permissions:
+  contents: write
+
 on:
   push:
     branches:
@@ -14,6 +17,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - run: |
           git fetch origin
           git checkout QA_BRANCH
@@ -27,6 +32,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - run: |
           git fetch origin
           git checkout PROD_BRANCH
